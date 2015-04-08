@@ -22,11 +22,7 @@ def get_random_char():
 
            
 def Createandpopulateadatabase(mode):
-    #DB_SIZE = 100000
- 
-    #SEED = 10000000
- 
-    DB_SIZE = 200
+    DB_SIZE = 100000
     SEED = 10000000
     
     if mode == 1:
@@ -117,7 +113,7 @@ def Retrieverecordswithagivenkey(mode):
                 end = time.time()      
                 decodevalue = value.decode(encoding='UTF-8')                
                 
-                print ("Time:",end-start)
+                print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
                 file.write(str(key)+"\n")
                 file.write(str(decodevalue)+"\n\n")
@@ -136,7 +132,7 @@ def Retrieverecordswithagivenkey(mode):
                     print ("Key does not exist")
                 print ("value is :", value)
                 decodevalue = value.decode(encoding='UTF-8')                
-                print ("Time:", end-start)
+                print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
                 file.write(str(key)+"\n")
                 file.write(str(decodevalue)+"\n\n")
@@ -154,7 +150,7 @@ def Retrieverecordswithagivenkey(mode):
                     print ("Key does not exist")
                 print ("value is :", value)
                 decodevalue = value.decode(encoding='UTF-8')                
-                print ("Time:", end-start)
+                print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
                 file.write(str(key)+"\n")
                 file.write(str(decodevalue)+"\n\n")
@@ -200,7 +196,7 @@ def Retrieverecordswithagivendata(mode):
                     print ("not found")
                     break
                 end = time.time()
-                print("Time :",end-start)
+                print ("Time:", 1000000*(end-start),"micro seconds")
                 print("Receive",len(keyList),"records")
                 for i in keyList:
                     print ("Key is:",i)
@@ -218,7 +214,7 @@ def Retrieverecordswithagivendata(mode):
                     print ("not found")
                     break
                 end = time.time()
-                print("Time :",end-start)
+                print("Time :",1000000*(end-start),"micro seconds")
                 print("Receive",len(keyList),"records")
                 for i in keyList:
                     print ("Key is:",i)
@@ -236,7 +232,7 @@ def Retrieverecordswithagivendata(mode):
                     print ("not found")
                     break
                 end = time.time()
-                print("Time :",end-start)
+                print ("Time:", 1000000*(end-start),"micro seconds")
                 print("Receive",len(keyList),"records")
                 for i in keyList:
                     print ("Key is:",i)
@@ -249,14 +245,56 @@ def Retrieverecordswithagivendata(mode):
 def Receivetracekeyrange(mode):
     while True:
         try:
-            db = bsddb.btopen(DA_FILE,"r")
-        except:
-            print ("open error")
-            return 0
-        lower = input("Please enter your lower bound:")
-        upper = input("Please enter your upper bound:")
-        
-
+            while True:
+                  
+                lower = input("Please enter your lower bound key:").encode(encoding='UTF-8')
+                upper = input("Please enter your upper bound key:").encode(encoding='UTF-8')
+                
+                if lower > upper:
+                    print ("invalid input lower should before upper ")    
+                else:
+                    break
+            if mode == 1:
+                try:
+                    DA_FILE = "/tmp/weijie2_db/bt_db"
+                    db = bsddb.btopen(DA_FILE,"r")
+                except:
+                    print ("open error")
+                    return 0 
+                file = open("answers","a")
+                start = time.time()
+                count = 0
+                for key in db.keys():
+                    if key > lower and key < upper:
+                        count += 1
+                        file.write(key.decode(encoding='UTF-8')+"\n")
+                        file.write(db[key].decode(encoding='UTF-8')+"\n\n")
+                end = time.time()
+                print ("There are totall",count,"records in this range.")
+                print ("Time :",1000000*(end-start),"micro seconds")
+                file.close()
+            elif mode == 2:
+                try:
+                    DA_FILE = "/tmp/weijie2_db/hash_db"
+                    db = bsddb.btopen(DA_FILE,"r")
+                except:
+                    print ("open error")
+                    return 0             
+                file = open("answers","a")
+                start = time.time()
+                count = 0
+                for key in db.keys():
+                    if key > lower and key < upper:
+                        count += 1
+                        file.write(key.decode(encoding='UTF-8'),"\n")
+                        file.write(db[key].decode(encoding='UTF-8')+"\n\n")
+                end = time.time()
+                print ("There are totall",count,"records in this range.")
+                print ("Time :",1000000*(end-start),"micro seconds")        
+                file.close()
+            break
+        except Exception as e:
+            print (e)
 
 def Setup():
     global file
