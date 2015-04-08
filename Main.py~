@@ -186,29 +186,8 @@ def Retrieverecordswithagivendata(mode):
         db = bsddb.btopen(DA_FILE, "r")
         invertDA_FILE = "/tmp/weijie2_db/invert_indexfile_db"
         invertdb = bsddb.btopen(invertDA_FILE, "r")        
-    while True:
-        try:
-            if mode == 1:
-                value = input("Input a Valid value:").encode(encoding = 'UTF-8')
-                keyList = []
-                start = time.time()
-                try:
-                    for key in db.keys():
-                        if db[key] == value:
-                            keyList.append(key.decode(encoding = 'UTF-8'))
-                except:
-                    print ("not found")
-                    break
-                end = time.time()
-                print("Time :",end-start)
-                print("Receive",len(keyList),"records")
-                for i in keyList:
-                    print ("Key is:",i)
-                db.close()
-                break
-        except Exception as e:
-            print (e)
-    return 0       
+    
+    
 
 def Setup():
     global file
@@ -245,7 +224,7 @@ def main():
     elif sys.argv[1].lower() == "hash":
         print("Hash Table")
         mode = 2
-    elif sys.argv[1].lower() == "index":
+    elif sys.argv[1].lower() == "hash":
         print("Index")
         mode = 3
     else:
@@ -272,19 +251,21 @@ def main():
                 print ("Invalid input")
             
         if choice == 1:
-
+            #from CreateDB import CreateDB
+            #CreateDB()
             Createandpopulateadatabase(mode)
             boolean = BackExit()
             
             
         elif choice == 2:
-
+           # from RetriKey import RetriKey 
+            #RetriKey()
             Retrieverecordswithagivenkey(mode)
             boolean = BackExit()
             
         elif choice == 3:
-
-            Retrieverecordswithagivendata(mode)
+            #from RetriValue import RetriValue
+            #RetriValue()
             boolean = BackExit()
             
         
