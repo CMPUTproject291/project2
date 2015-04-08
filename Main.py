@@ -206,9 +206,57 @@ def Retrieverecordswithagivendata(mode):
                     print ("Key is:",i)
                 db.close()
                 break
+            elif mode == 2:
+                value = input("Input a Valid value:").encode(encoding = 'UTF-8')
+                keyList = []
+                start = time.time()
+                try:
+                    for key in db.keys():
+                        if db[key] == value:
+                            keyList.append(key.decode(encoding = 'UTF-8'))
+                except:
+                    print ("not found")
+                    break
+                end = time.time()
+                print("Time :",end-start)
+                print("Receive",len(keyList),"records")
+                for i in keyList:
+                    print ("Key is:",i)
+                db.close()
+                break
+            elif mode == 3:
+                value = input("Input a Valid value:").encode(encoding = 'UTF-8')
+                keyList = []
+                start = time.time()
+                try:
+                    for key in db.keys():
+                        if db[key] == value:
+                            keyList.append(key.decode(encoding = 'UTF-8'))
+                except:
+                    print ("not found")
+                    break
+                end = time.time()
+                print("Time :",end-start)
+                print("Receive",len(keyList),"records")
+                for i in keyList:
+                    print ("Key is:",i)
+                db.close()
+                break                
         except Exception as e:
             print (e)
     return 0       
+
+def Receivetracekeyrange(mode):
+    while True:
+        try:
+            db = bsddb.btopen(DA_FILE,"r")
+        except:
+            print ("open error")
+            return 0
+        lower = input("Please enter your lower bound:")
+        upper = input("Please enter your upper bound:")
+        
+
 
 def Setup():
     global file
@@ -291,6 +339,7 @@ def main():
         elif choice == 4:
             #from RetriKRange import RetriKRange
             #RetriKRange()
+            Receivetracekeyrange(mode)
             boolean = BackExit()
             
             
