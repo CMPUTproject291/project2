@@ -48,7 +48,7 @@ def Createandpopulateadatabase(mode):
             db = bsddb.hashopen(DA_FILE, "c")
             invertdb = bsddb.hashopen(invertDA_FILE, "c")
         random.seed(SEED)        
-    elif opt == '3':
+    elif mode == 3:
         DA_FILE = "/tmp/weijie2_db/indexfile_db"
         invertDA_FILE = "/tmp/weijie2_db/invert_indexfile_db"
         try:
@@ -123,7 +123,7 @@ def Retrieverecordswithagivenkey(mode):
         
             elif mode == 2:
                 DA_FILE = "/tmp/weijie2_db/hash_db"
-                db = bsddb.btopen(DA_FILE, "r")
+                db = bsddb.hashopen(DA_FILE, "r")
                 key = input("Input a Valid Key :").encode(encoding='UTF-8')
                 start = time.time()
                 try:
@@ -132,6 +132,7 @@ def Retrieverecordswithagivenkey(mode):
                 except :
                     print ("Key does not exist")
                 print ("value is :", value)
+                end = time.time()
                 decodevalue = value.decode(encoding='UTF-8')                
                 print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
@@ -149,6 +150,7 @@ def Retrieverecordswithagivenkey(mode):
                     print ("found")
                 except :
                     print ("Key does not exist")
+                end = time.time()
                 print ("value is :", value)
                 decodevalue = value.decode(encoding='UTF-8')                
                 print ("Time:", 1000000*(end-start),"micro seconds")
@@ -157,14 +159,9 @@ def Retrieverecordswithagivenkey(mode):
                 file.write(str(decodevalue)+"\n\n")
                 file.close()
                 break            
-                
+            db.close()    
         except Exception as e:
-            print ("error")
-            print (e)            
-    try:
-        db.close()
-    except Exception as e:
-        print (e)
+            print (e)
 
 
 def Retrieverecordswithagivendata(mode):
@@ -177,7 +174,7 @@ def Retrieverecordswithagivendata(mode):
         DA_FILE = "/tmp/weijie2_db/hash_db"
         db = bsddb.hashopen(DA_FILE, "r")
         invertDA_FILE = "/tmp/weijie2_db/invert_hash_db"
-        invert_db = bsddb.hashopen(invert_DA_FILE, "r")
+        invertdb = bsddb.hashopen(invertDA_FILE, "r")
     elif mode == 3:
         DA_FILE = "/tmp/weijie2_db/indexfile_db"
         db = bsddb.btopen(DA_FILE, "r")
@@ -277,7 +274,7 @@ def Receivetracekeyrange(mode):
             elif mode == 2:
                 try:
                     DA_FILE = "/tmp/weijie2_db/hash_db"
-                    db = bsddb.btopen(DA_FILE,"r")
+                    db = bsddb.hashopen(DA_FILE,"r")
                 except:
                     print ("open error")
                     return 0             
@@ -287,7 +284,7 @@ def Receivetracekeyrange(mode):
                 for key in db.keys():
                     if key > lower and key < upper:
                         count += 1
-                        file.write(key.decode(encoding='UTF-8'),"\n")
+                        file.write(key.decode(encoding='UTF-8')+"\n")
                         file.write(db[key].decode(encoding='UTF-8')+"\n\n")
                 end = time.time()
                 print ("There are totall",count,"records in this range.")
@@ -301,7 +298,7 @@ def Receivetracekeyrange(mode):
                     print ("open error")
                     return 0                     
                 file = open("answers","a")
-                keys = bd.keys()
+                keys = db.keys()
                 begin = binarysearch(keys,lower)
                 finish = binarysearch(keys,upper)
                 count = 0
