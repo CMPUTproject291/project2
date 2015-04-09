@@ -15,6 +15,7 @@ def BackExit():
             return False
         else:
             print ("invalid input [1,2]")
+            
 def get_random():
     return random.randint(0, 63)
 def get_random_char():
@@ -292,9 +293,47 @@ def Receivetracekeyrange(mode):
                 print ("There are totall",count,"records in this range.")
                 print ("Time :",1000000*(end-start),"micro seconds")        
                 file.close()
+            elif mode == 3:
+                try:
+                    DA_FILE = "/tmp/weijie2_db/indexfile_db"
+                    db = bsddb.btopen(DA_FILE,"r")      
+                except:
+                    print ("open error")
+                    return 0                     
+                file = open("answers","a")
+                keys = bd.keys()
+                begin = binarysearch(keys,lower)
+                finish = binarysearch(keys,upper)
+                count = 0
+                start = time.time()
+                while begin <= finish:
+                    key = keys[begin]
+                    count +=1 
+                    file.write(key.decode(encoding='UTF-8')+"\n")
+                    file.write(db[key].decode(encoding='UTF-8')+"\n\n")
+                    begin +=1
+                end = time.time()
+                print ("Time :",1000000*(end-start),"micro seconds")
+                print ("There are",count,"records in this range.")
             break
+        
         except Exception as e:
             print (e)
+
+def binarysearch(keys,target):
+    low = 0
+    high = len(keys)-1
+    while low < high:
+        mid = (low+high)//2
+        if target == keys[mid]:
+            return mid
+        elif target < keys[mid]:
+            high = mid-1
+            result = high
+        else:
+            low = mid+1
+            result = mid +1
+    return result
 
 def Setup():
     global file
@@ -375,15 +414,15 @@ def main():
             
         
         elif choice == 4:
-            #from RetriKRange import RetriKRange
-            #RetriKRange()
+ 
             Receivetracekeyrange(mode)
             boolean = BackExit()
             
             
         elif choice == 5:
-            #from DestroyDB import DestroyDB
+            
             DestroyTheDatabase(mode)        
+            print ("You can only pick 1 or 6")
             boolean = BackExit()
             
     
