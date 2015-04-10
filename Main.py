@@ -23,7 +23,7 @@ def get_random_char():
 
            
 def Createandpopulateadatabase(mode):
-    DB_SIZE = 100000
+    DB_SIZE = 1000
     SEED = 10000000
     
     if mode == 1:
@@ -263,7 +263,7 @@ def Receivetracekeyrange(mode):
                 start = time.time()
                 count = 0
                 for key in db.keys():
-                    if key > lower and key < upper:
+                    if key >= lower and key <= upper:
                         count += 1
                         file.write(key.decode(encoding='UTF-8')+"\n")
                         file.write(db[key].decode(encoding='UTF-8')+"\n\n")
@@ -282,7 +282,7 @@ def Receivetracekeyrange(mode):
                 start = time.time()
                 count = 0
                 for key in db.keys():
-                    if key > lower and key < upper:
+                    if key >= lower and key <= upper:
                         count += 1
                         file.write(key.decode(encoding='UTF-8')+"\n")
                         file.write(db[key].decode(encoding='UTF-8')+"\n\n")
