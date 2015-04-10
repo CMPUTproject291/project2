@@ -23,7 +23,7 @@ def get_random_char():
 
            
 def Createandpopulateadatabase(mode):
-    DB_SIZE = 1000
+    DB_SIZE = 100000
     SEED = 10000000
     
     if mode == 1:
