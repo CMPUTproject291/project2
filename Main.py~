@@ -263,7 +263,7 @@ def Receivetracekeyrange(mode):
                 start = time.time()
                 count = 0
                 for key in db.keys():
-                    if key > lower and key < upper:
+                    if key >= lower and key <= upper:
                         count += 1
                         file.write(key.decode(encoding='UTF-8')+"\n")
                         file.write(db[key].decode(encoding='UTF-8')+"\n\n")
@@ -282,7 +282,7 @@ def Receivetracekeyrange(mode):
                 start = time.time()
                 count = 0
                 for key in db.keys():
-                    if key > lower and key < upper:
+                    if key >= lower and key <= upper:
                         count += 1
                         file.write(key.decode(encoding='UTF-8')+"\n")
                         file.write(db[key].decode(encoding='UTF-8')+"\n\n")
@@ -424,6 +424,7 @@ def main():
             
     
         elif choice == 6:
+            subprocess.call(['rm','-r','answers'])
             boolean = False
             
     print ("Goodbye!")
