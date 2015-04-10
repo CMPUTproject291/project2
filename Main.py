@@ -441,7 +441,7 @@ def main():
             
     
         elif choice == 6:
-            DestroyTheDatabase(mode)
+            #DestroyTheDatabase(mode)
             subprocess.call(['rm','-r','answers'])
             boolean = False
             

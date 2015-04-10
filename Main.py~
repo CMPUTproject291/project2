@@ -24,6 +24,8 @@ def get_random_char():
            
 def Createandpopulateadatabase(mode):
     DB_SIZE = 100000
+    #DB_SIZE = 1000
+    
     SEED = 10000000
     
     if mode == 1:
@@ -71,7 +73,7 @@ def Createandpopulateadatabase(mode):
         for j in range(v):
             value += str(chr(97 + random.randint(0, 25)))
             
-        print ("key:",key,"\nvalue:",value,"\n",i)
+        print ("key:",key,"\nvalue:",value,"\n")
         key = key.encode(encoding='UTF-8')
         value = value.encode(encoding='UTF-8')
         db[key] = value
@@ -110,14 +112,13 @@ def Retrieverecordswithagivenkey(mode):
                     print ("found")
                 except:
                     print ("Key does not exist")
-                print ("value is :",value)
                 end = time.time()      
                 decodevalue = value.decode(encoding='UTF-8')                
-                
+                print ("value is :",decodevalue)
                 print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
-                file.write(str(key)+"\n")
-                file.write(str(decodevalue)+"\n\n")
+                file.write(key.decode(encoding='UTF-8')+"\n")
+                file.write(decodevalue+"\n\n")
                 file.close()
                 break
         
@@ -131,13 +132,13 @@ def Retrieverecordswithagivenkey(mode):
                     print ("found")
                 except :
                     print ("Key does not exist")
-                print ("value is :", value)
                 end = time.time()
-                decodevalue = value.decode(encoding='UTF-8')                
+                decodevalue = value.decode(encoding='UTF-8')   
+                print ("value is :", decodevalue)
                 print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
-                file.write(str(key)+"\n")
-                file.write(str(decodevalue)+"\n\n")
+                file.write(key.decode(encoding='UTF-8')+"\n")
+                file.write(decodevalue+"\n\n")
                 file.close()
                 break   
             elif mode == 3:
@@ -151,12 +152,12 @@ def Retrieverecordswithagivenkey(mode):
                 except :
                     print ("Key does not exist")
                 end = time.time()
-                print ("value is :", value)
-                decodevalue = value.decode(encoding='UTF-8')                
+                decodevalue = value.decode(encoding='UTF-8')      
+                print ("value is :", decodevalue)                
                 print ("Time:", 1000000*(end-start),"micro seconds")
                 file = open("answers","a")
-                file.write(str(key)+"\n")
-                file.write(str(decodevalue)+"\n\n")
+                file.write(key.decode(encoding='UTF-8')+"\n")
+                file.write(decodevalue+"\n\n")
                 file.close()
                 break            
             db.close()    
@@ -196,8 +197,12 @@ def Retrieverecordswithagivendata(mode):
                 end = time.time()
                 print ("Time:", 1000000*(end-start),"micro seconds")
                 print("Receive",len(keyList),"records")
+                file=open("answers","a")
                 for i in keyList:
                     print ("Key is:",i)
+                    file.write(key.decode(encoding='UTF-8')+"\n")                
+                    file.write(value.decode(encoding='UTF-8')+"\n\n")         
+                file.close()                    
                 db.close()
                 break
             elif mode == 2:
@@ -214,8 +219,14 @@ def Retrieverecordswithagivendata(mode):
                 end = time.time()
                 print("Time :",1000000*(end-start),"micro seconds")
                 print("Receive",len(keyList),"records")
+                file=open("answers","a")
+                
                 for i in keyList:
                     print ("Key is:",i)
+                    file.write(key.decode(encoding='UTF-8')+"\n")                
+                    file.write(value.decode(encoding='UTF-8')+"\n\n")      
+                file.close()                    
+                
                 db.close()
                 break
             elif mode == 3:
@@ -232,8 +243,12 @@ def Retrieverecordswithagivendata(mode):
                 end = time.time()
                 print ("Time:", 1000000*(end-start),"micro seconds")
                 print("Receive",len(keyList),"records")
+                file=open("answers","a")                
                 for i in keyList:
                     print ("Key is:",i)
+                    file.write(key.decode(encoding='UTF-8')+"\n")                
+                    file.write(value.decode(encoding='UTF-8')+"\n\n")      
+                file.close()                      
                 db.close()
                 break                
         except Exception as e:
@@ -341,22 +356,24 @@ def Setup():
         print ("Create")
         
     try:
-        file = open("results","w")
+        file = open("answers","w")
     except:
         print ("error")
     
-def DestroyTheDatabase (opt):
-
-    if opt == 1:
-        subprocess.call(['rm','-r','/tmp/weijie2_db/bt_db'])
-        subprocess.call(['rm','-r','/tmp/weijie2_db/invert_bt_db'])
-                     
-    if opt == 2:
-        subprocess.call(['rm','-r','/tmp/weijie2_db/hash_db'])
-        subprocess.call(['rm','-r','/tmp/weijie2_db/invert_hash_db'])
-        
-    if opt == 3:
-        os.system("rm /tmp/weijie2_db/indexfile_db")    
+def DestroyTheDatabase (mode):
+    try:
+        if opt == 1:
+            subprocess.call(['rm','-r','/tmp/weijie2_db/bt_db'])
+            subprocess.call(['rm','-r','/tmp/weijie2_db/invert_bt_db'])
+                         
+        if opt == 2:
+            subprocess.call(['rm','-r','/tmp/weijie2_db/hash_db'])
+            subprocess.call(['rm','-r','/tmp/weijie2_db/invert_hash_db'])
+            
+        if opt == 3:
+            os.system("rm /tmp/weijie2_db/indexfile_db")   
+    except:
+        return 0
         
 def main():
     Setup()
@@ -396,34 +413,35 @@ def main():
         if choice == 1:
 
             Createandpopulateadatabase(mode)
-            boolean = BackExit()
+            #boolean = BackExit()
             
             
         elif choice == 2:
 
             Retrieverecordswithagivenkey(mode)
-            boolean = BackExit()
+            #boolean = BackExit()
             
         elif choice == 3:
 
             Retrieverecordswithagivendata(mode)
-            boolean = BackExit()
+            #boolean = BackExit()
             
         
         elif choice == 4:
  
             Receivetracekeyrange(mode)
-            boolean = BackExit()
+            #boolean = BackExit()
             
             
         elif choice == 5:
             
             DestroyTheDatabase(mode)        
             print ("You can only pick 1 or 6")
-            boolean = BackExit()
+            #boolean = BackExit()
             
     
         elif choice == 6:
+            DestroyTheDatabase(mode)
             subprocess.call(['rm','-r','answers'])
             boolean = False
             
